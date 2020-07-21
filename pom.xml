@@ -66,6 +66,12 @@
 		    <artifactId>mysql-connector-java</artifactId>
 		    <version>8.0.21</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -79,6 +85,32 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+	
+	<profiles>
+	
+		<profile>
+			
+			<id>dev</id>
+			
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<properties>
+				<activeProfile>dev</activeProfile>
+			</properties>
+			
+		</profile>
+		
+		<profile>
+			<id>heroku</id>
+
+			<properties>
+				<activeProfile>heroku</activeProfile>
+			</properties>
+		</profile>
+		
+	</profiles>
 
 	<build>
 		<plugins>
