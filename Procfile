@@ -1,1 +1,1 @@
-web: mvn spring-boot:run -Dspring-boot.run.profiles=heroku
+web: java -jar ./target/trousseau_server-0.0.1-SNAPSHOT.jar
