@@ -1,1 +1,1 @@
-web: mvn spring-boot:run -Drun.profiles=heroku
+web: mvn spring-boot:run -Dspring-boot.run.profiles=heroku
