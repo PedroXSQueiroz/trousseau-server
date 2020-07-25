@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import br.com.pedroxsqueiroz.trousseau_server.models.Flat;
-import br.com.pedroxsqueiroz.trousseau_server.models.Item;
+import br.com.pedroxsqueiroz.trousseau_server.models.FlatItem;
 
 @Repository
-public interface ItemDao extends JpaRepository<Item, Integer>, JpaSpecificationExecutor<Item> {
+public interface FlatItemDao extends JpaRepository<FlatItem, Integer>, JpaSpecificationExecutor<FlatItem>{
 
-	List<Item> findAllByFlat(Flat flatByCode);
+	List<FlatItem> findAllByFlat(Flat flatByCode);
 
 }
