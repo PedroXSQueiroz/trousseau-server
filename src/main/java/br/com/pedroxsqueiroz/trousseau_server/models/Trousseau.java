@@ -28,7 +28,7 @@ import lombok.Data;
 public class Trousseau {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "trousseau_id")
 	private Integer id;
 	

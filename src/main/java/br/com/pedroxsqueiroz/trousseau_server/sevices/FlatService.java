@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import br.com.pedroxsqueiroz.trousseau_server.models.FlatItem;
+import br.com.pedroxsqueiroz.trousseau_server.repositories.FlatItemDao;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -18,6 +21,8 @@ import br.com.pedroxsqueiroz.trousseau_server.models.Trousseau;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.FlatDao;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.ItemDao;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.TrousseauDao;
+
+import javax.transaction.Transactional;
 
 @Service
 @CrossOrigin("*")
@@ -37,6 +42,9 @@ public class FlatService {
 	
 	@Autowired
 	private TrousseauDao trousseauDao;
+
+	@Autowired
+	private FlatItemDao flatItemDao;
 	
 	public Page<Flat> list(Pageable pageable)
 	{
@@ -107,26 +115,32 @@ public class FlatService {
 	private Flat getFlatByUnityAndFloor(int unity, int floor) {
 		Flat flat = this.dao.findByUnityAndFloor(unity, floor);
 		
-		if(Objects.isNull(flat)) 
+		if(Objects.isNull(flat))
 		{
-			
 			flat = new Flat();
 			flat.setFloor(floor);
 			flat.setUnity(unity);
-			
 		}
 		
 		return flat;
 	}
-	
-	private Flat init(Flat flat) 
+
+	@Transactional
+	private Flat init(Flat flat)
 	{
-		return this.dao.save(flat);
+		return this.dao.saveAndFlush(flat);
 	}
 
-	public List<Item> getItensFromFlat(String code) 
+	public List<FlatItem> getItensFromFlat(String code)
 	{
-		return this.itemDao.findAll();
+		Flat flat = this.getFlatByCode(code);
+
+		if(!flat.initiated())
+		{
+			return new ArrayList<FlatItem>();
+		}
+
+		return this.flatItemDao.findByFlat(flat);
 	}
 
 	public List<Trousseau> listTrousseausByFlat(String flatCode) {
@@ -143,4 +157,38 @@ public class FlatService {
 		);
 	}
 
+	public FlatItem addItemToFlat(String code, FlatItem flatItem) {
+
+		final Flat flat = this.getFlatByCode(code);
+
+		if(!flat.initiated())
+		{
+			this.init(flat);
+		}
+
+		return this.addItemToFlat(flat, flatItem);
+	}
+
+	@Transactional
+	public FlatItem addItemToFlat(Flat flat, FlatItem flatItem)
+	{
+		this.itemDao.save( flatItem.getItem() );
+
+		flatItem.setFlat(flat);
+		flatItem.setUpToDate(true);
+
+		return this.flatItemDao.save(flatItem);
+	}
+
+	//FIXME: criar mecânica para criar novo e manter itens anteriores
+	public FlatItem updateFlatItem(Integer id, FlatItem flatItemUpdated) {
+
+		FlatItem flatItem = this.flatItemDao.getOne(id);
+		Flat flat = flatItem.getFlat();
+
+		//WARNING: não será feita utilizando o bean, somente id, para ser feita uma query delecão lógica
+		this.flatItemDao.delete(id);
+
+		return this.addItemToFlat( flat, flatItemUpdated );
+	}
 }

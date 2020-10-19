@@ -18,4 +18,7 @@ echo 'starting server!'
 echo '----------------------------------'
 
 cd server && \
+    mvn flyway:migrate  -Dflyway.user=$DATABASE_USER \
+                        -Dflyway.password=$DATABASE_PASSWORD \
+                        -Dflyway.url=jdbc:postgresql://$DATABASE_SERVER_URL:$DATABASE_SERVER_PORT/trousseau && \
     mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=$DEBUG_PORT"

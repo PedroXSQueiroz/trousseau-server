@@ -24,11 +24,10 @@ import lombok.Data;
 public abstract class AbstractTrousseauItem {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "trousseau_item_id")
 	private Integer id;
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "item_id")
 	private Item item;
