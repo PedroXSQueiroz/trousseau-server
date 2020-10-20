@@ -20,7 +20,7 @@ public interface FlatItemDao extends JpaRepository<FlatItem, Integer> {
 
     List<FlatItem> findByFlat(Flat flatByCode);
 
-    @Query("from FlatItem fi where fi.flat = :flat and fi.item.name = :name")
+    @Query("from FlatItem fi where fi.flat = :flat and fi.item.name = :name and fi.upToDate = true")
     FlatItem findByFlatAndName(@Param("flat") Flat flat, @Param("name") String name);
 
     List<FlatItem> findByFlatAndUpToDate(Flat flat, boolean b);

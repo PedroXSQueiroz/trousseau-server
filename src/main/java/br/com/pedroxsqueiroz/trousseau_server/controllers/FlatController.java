@@ -6,6 +6,9 @@ import br.com.pedroxsqueiroz.trousseau_server.models.FlatItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.pedroxsqueiroz.trousseau_server.models.Flat;
@@ -59,9 +62,18 @@ public class FlatController {
 
 	@PutMapping("/{code}/item/{name}")
 	@ResponseBody
-	public FlatItem updateItem(@PathVariable("code") String code, @PathVariable("name") String name, @RequestBody FlatItem item)
+	public FlatItem updateItemOfFlat(@PathVariable("code") String code, @PathVariable("name") String name, @RequestBody FlatItem item)
 	{
 		return this.flatService.updateFlatItem(code, name, item);
+	}
+
+	@DeleteMapping("/{code}/item/{name}")
+	@ResponseBody
+	public ResponseEntity deleteItemFromFlat(@PathVariable("code") String code, @PathVariable("name") String name)
+	{
+		this.flatService.deleteFlatItem(code, name);
+
+		return new ResponseEntity(HttpStatus.OK);
 	}
 	
 }

@@ -184,14 +184,28 @@ public class FlatService {
 
 		Flat flat = this.getFlatByCode(code);
 
-		FlatItem flatItem = this.flatItemDao.findByFlatAndName(flat, name);
-
-		//WARNING: não será feita utilizando o bean, somente id, para ser feita uma query delecão lógica
-		this.flatItemDao.delete(flatItem.getId());
+		this.deleteFlatItem(flat, name);
 
 		flatItemUpdated.setId(null);
 		flatItemUpdated.getItem().setId(null);
 
 		return this.addItemToFlat( flat, flatItemUpdated );
+	}
+
+	@Transactional
+	public void deleteFlatItem(Flat flat, String name)
+	{
+		FlatItem flatItem = this.flatItemDao.findByFlatAndName(flat, name);
+
+		//WARNING: não será feita utilizando o bean, somente id, para ser feita uma query delecão lógica
+		this.flatItemDao.delete(flatItem.getId());
+	}
+
+	@Transactional
+	public void deleteFlatItem(String code, String name) {
+
+		Flat flat = this.getFlatByCode(code);
+		this.deleteFlatItem(flat, name);
+
 	}
 }
