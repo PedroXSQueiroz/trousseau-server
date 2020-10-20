@@ -57,11 +57,11 @@ public class FlatController {
 		return this.flatService.addItemToFlat(code, item);
 	}
 
-	@PutMapping("/item/{id}")
+	@PutMapping("/{code}/item/{name}")
 	@ResponseBody
-	public FlatItem updateItem(@PathVariable("id") Integer id, @RequestBody FlatItem item)
+	public FlatItem updateItem(@PathVariable("code") String code, @PathVariable("name") String name, @RequestBody FlatItem item)
 	{
-		return this.flatService.updateFlatItem(id, item);
+		return this.flatService.updateFlatItem(code, name, item);
 	}
 	
 }

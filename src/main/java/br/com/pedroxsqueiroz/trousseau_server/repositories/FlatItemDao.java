@@ -15,8 +15,13 @@ import java.util.List;
 public interface FlatItemDao extends JpaRepository<FlatItem, Integer> {
 
     @Modifying
-    @Query("update FlatItem fi set up_to_date=0 where fi.id = :id")
+    @Query("update FlatItem fi set up_to_date=false where fi.id = :id")
     void delete(@Param("id") Integer id);
 
     List<FlatItem> findByFlat(Flat flatByCode);
+
+    @Query("from FlatItem fi where fi.flat = :flat and fi.item.name = :name")
+    FlatItem findByFlatAndName(@Param("flat") Flat flat, @Param("name") String name);
+
+    List<FlatItem> findByFlatAndUpToDate(Flat flat, boolean b);
 }

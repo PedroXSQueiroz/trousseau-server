@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import br.com.pedroxsqueiroz.trousseau_server.models.FlatItem;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.FlatItemDao;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import br.com.pedroxsqueiroz.trousseau_server.models.Flat;
-import br.com.pedroxsqueiroz.trousseau_server.models.Item;
 import br.com.pedroxsqueiroz.trousseau_server.models.Trousseau;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.FlatDao;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.ItemDao;
@@ -140,7 +138,7 @@ public class FlatService {
 			return new ArrayList<FlatItem>();
 		}
 
-		return this.flatItemDao.findByFlat(flat);
+		return this.flatItemDao.findByFlatAndUpToDate(flat, true);
 	}
 
 	public List<Trousseau> listTrousseausByFlat(String flatCode) {
@@ -181,13 +179,18 @@ public class FlatService {
 	}
 
 	//FIXME: criar mecânica para criar novo e manter itens anteriores
-	public FlatItem updateFlatItem(Integer id, FlatItem flatItemUpdated) {
+	@Transactional
+	public FlatItem updateFlatItem(String code, String name, FlatItem flatItemUpdated) {
 
-		FlatItem flatItem = this.flatItemDao.getOne(id);
-		Flat flat = flatItem.getFlat();
+		Flat flat = this.getFlatByCode(code);
+
+		FlatItem flatItem = this.flatItemDao.findByFlatAndName(flat, name);
 
 		//WARNING: não será feita utilizando o bean, somente id, para ser feita uma query delecão lógica
-		this.flatItemDao.delete(id);
+		this.flatItemDao.delete(flatItem.getId());
+
+		flatItemUpdated.setId(null);
+		flatItemUpdated.getItem().setId(null);
 
 		return this.addItemToFlat( flat, flatItemUpdated );
 	}
