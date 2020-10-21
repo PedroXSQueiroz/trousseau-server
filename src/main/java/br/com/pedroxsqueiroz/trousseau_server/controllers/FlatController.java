@@ -2,6 +2,7 @@ package br.com.pedroxsqueiroz.trousseau_server.controllers;
 
 import java.util.List;
 
+import br.com.pedroxsqueiroz.trousseau_server.exceptions.FlatItemAlreadyExists;
 import br.com.pedroxsqueiroz.trousseau_server.models.FlatItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -55,15 +56,13 @@ public class FlatController {
 
 	@PostMapping("/{code}/item")
 	@ResponseBody
-	public FlatItem addItemToFlat( @PathVariable("code") String code, @RequestBody FlatItem item )
-	{
+	public FlatItem addItemToFlat( @PathVariable("code") String code, @RequestBody FlatItem item ) throws FlatItemAlreadyExists {
 		return this.flatService.addItemToFlat(code, item);
 	}
 
 	@PutMapping("/{code}/item/{name}")
 	@ResponseBody
-	public FlatItem updateItemOfFlat(@PathVariable("code") String code, @PathVariable("name") String name, @RequestBody FlatItem item)
-	{
+	public FlatItem updateItemOfFlat(@PathVariable("code") String code, @PathVariable("name") String name, @RequestBody FlatItem item) throws FlatItemAlreadyExists {
 		return this.flatService.updateFlatItem(code, name, item);
 	}
 

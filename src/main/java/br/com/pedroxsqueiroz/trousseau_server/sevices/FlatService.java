@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import br.com.pedroxsqueiroz.trousseau_server.exceptions.FlatItemAlreadyExists;
 import br.com.pedroxsqueiroz.trousseau_server.models.FlatItem;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.FlatItemDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -155,7 +154,7 @@ public class FlatService {
 		);
 	}
 
-	public FlatItem addItemToFlat(String code, FlatItem flatItem) {
+	public FlatItem addItemToFlat(String code, FlatItem flatItem) throws FlatItemAlreadyExists {
 
 		final Flat flat = this.getFlatByCode(code);
 
@@ -168,19 +167,33 @@ public class FlatService {
 	}
 
 	@Transactional
-	public FlatItem addItemToFlat(Flat flat, FlatItem flatItem)
-	{
+	public FlatItem addItemToFlat(Flat flat, FlatItem flatItem) throws FlatItemAlreadyExists {
+
+		flatItem.setUpToDate(true);
+
+		ExampleMatcher flatExampleMatcher = ExampleMatcher
+				.matching()
+				.withIgnorePaths("id", "quantity", "item.id", "item.value");
+
+		Example<FlatItem> flatExample = Example.of(flatItem, flatExampleMatcher);
+
+		boolean exists = this.flatItemDao.exists(flatExample);
+
+		if(exists)
+		{
+			throw new FlatItemAlreadyExists(flat, flatItem.getItem());
+		}
+
 		this.itemDao.save( flatItem.getItem() );
 
 		flatItem.setFlat(flat);
-		flatItem.setUpToDate(true);
 
 		return this.flatItemDao.save(flatItem);
 	}
 
 	//FIXME: criar mecânica para criar novo e manter itens anteriores
 	@Transactional
-	public FlatItem updateFlatItem(String code, String name, FlatItem flatItemUpdated) {
+	public FlatItem updateFlatItem(String code, String name, FlatItem flatItemUpdated) throws FlatItemAlreadyExists {
 
 		Flat flat = this.getFlatByCode(code);
 
