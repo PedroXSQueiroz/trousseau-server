@@ -27,7 +27,7 @@ public class Flat {
 	private Integer unity;
 
 	@OneToMany
-	@JoinColumn(name = "flat_item_id")
+	@JoinColumn(name = "flat_id")
 	@Where(clause="up_to_date=true")
 	private List<FlatItem> itens;
 
