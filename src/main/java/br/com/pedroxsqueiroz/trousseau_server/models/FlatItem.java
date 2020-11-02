@@ -11,6 +11,17 @@ import javax.persistence.*;
 @Data
 public class FlatItem {
 
+    public FlatItem()
+    {
+
+    }
+
+    public FlatItem(Flat flat, Item item)
+    {
+        this.flat = flat;
+        this.item = item;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "flat_item_id")

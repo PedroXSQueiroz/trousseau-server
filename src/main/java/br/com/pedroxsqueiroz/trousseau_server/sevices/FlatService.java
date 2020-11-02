@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import br.com.pedroxsqueiroz.trousseau_server.exceptions.FlatItemAlreadyExists;
 import br.com.pedroxsqueiroz.trousseau_server.models.FlatItem;
+import br.com.pedroxsqueiroz.trousseau_server.models.Item;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.FlatItemDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -169,29 +170,44 @@ public class FlatService {
 	@Transactional
 	public FlatItem addItemToFlat(Flat flat, FlatItem flatItem) throws FlatItemAlreadyExists {
 
-		flatItem.setUpToDate(true);
+        Item item = flatItem.getItem();
 
-		ExampleMatcher flatExampleMatcher = ExampleMatcher
-				.matching()
-				.withIgnorePaths("id", "quantity", "item.id", "item.value");
+        boolean exists = this.flatItemExists(flat, item);
 
-		Example<FlatItem> flatExample = Example.of(flatItem, flatExampleMatcher);
-
-		boolean exists = this.flatItemDao.exists(flatExample);
-
-		if(exists)
+        if(exists)
 		{
-			throw new FlatItemAlreadyExists(flat, flatItem.getItem());
+			throw new FlatItemAlreadyExists(flat, item);
 		}
 
-		this.itemDao.save( flatItem.getItem() );
+		this.itemDao.save(item);
 
 		flatItem.setFlat(flat);
+		flatItem.setUpToDate(true);
 
 		return this.flatItemDao.save(flatItem);
 	}
 
-	//FIXME: criar mecânica para criar novo e manter itens anteriores
+	private boolean flatItemExists(Flat flat, Item item)
+    {
+        FlatItem flatItem = new FlatItem(flat, item);
+        return this.flatItemExists(flatItem);
+    }
+
+	private boolean flatItemExists(FlatItem flatItem) {
+        flatItem.setUpToDate(true);
+
+        ExampleMatcher flatExampleMatcher = ExampleMatcher
+                .matching()
+                .withIgnorePaths("id", "quantity", "item.id", "item.value");
+
+        Example<FlatItem> flatExample = Example.of(flatItem, flatExampleMatcher);
+
+        boolean exists = this.flatItemDao.exists(flatExample);
+
+        return exists;
+    }
+
+    //FIXME: criar mecânica para criar novo e manter itens anteriores
 	@Transactional
 	public FlatItem updateFlatItem(String code, String name, FlatItem flatItemUpdated) throws FlatItemAlreadyExists {
 

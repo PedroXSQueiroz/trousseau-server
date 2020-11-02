@@ -36,7 +36,6 @@ public class Flat {
 	{
 		return !Objects.isNull(this.id);
 	}
-
 	public static String buildCodeFromUnityAndFloor(Integer unity, Integer floor) {
 		return String.format( "%s%s", floor, StringUtils.leftPad(unity.toString(), 2, "0")  );
 	}
