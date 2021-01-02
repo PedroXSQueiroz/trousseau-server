@@ -18,7 +18,7 @@ import br.com.pedroxsqueiroz.trousseau_server.models.Trousseau;
 import br.com.pedroxsqueiroz.trousseau_server.sevices.FlatService;
 
 @RestController
-@RequestMapping("flats")
+@RequestMapping("/flats")
 @CrossOrigin("*")
 public class FlatController {
 

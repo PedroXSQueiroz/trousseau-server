@@ -23,7 +23,6 @@ import br.com.pedroxsqueiroz.trousseau_server.repositories.TrousseauDao;
 import javax.transaction.Transactional;
 
 @Service
-@CrossOrigin("*")
 public class FlatService {
 
 	@Value("${building_specs.floors}")
