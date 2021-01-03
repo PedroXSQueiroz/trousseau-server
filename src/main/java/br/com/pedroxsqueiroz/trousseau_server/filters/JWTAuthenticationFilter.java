@@ -6,7 +6,7 @@ import br.com.pedroxsqueiroz.trousseau_server.dtos.TokenDto;
 import br.com.pedroxsqueiroz.trousseau_server.sevices.AuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.SneakyThrows;
+
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,22 +14,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletOutputStream;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationService authService;
 
+    static UsernamePasswordAuthenticationToken EMPTY_AUTH = new UsernamePasswordAuthenticationToken(null, null);
+
     public JWTAuthenticationFilter(AuthenticationService authService)
     {
         this.authService = authService;
-
         setFilterProcessesUrl("/auth/");
     }
 
@@ -102,6 +101,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ServletOutputStream outputStream = response.getOutputStream();
         outputStream.write(responseBytes);
         outputStream.flush();
-
     }
+
 }

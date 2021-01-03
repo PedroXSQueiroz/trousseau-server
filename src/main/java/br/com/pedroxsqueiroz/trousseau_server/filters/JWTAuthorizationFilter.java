@@ -1,15 +1,11 @@
 package br.com.pedroxsqueiroz.trousseau_server.filters;
 
-import br.com.pedroxsqueiroz.trousseau_server.api_utils.ResponseFactory;
 import br.com.pedroxsqueiroz.trousseau_server.dtos.Credentials;
-import br.com.pedroxsqueiroz.trousseau_server.models.User;
 import br.com.pedroxsqueiroz.trousseau_server.sevices.AuthenticationService;
-import br.com.pedroxsqueiroz.trousseau_server.sevices.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -18,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Objects;

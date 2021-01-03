@@ -3,18 +3,18 @@ package br.com.pedroxsqueiroz.trousseau_server.config;
 import br.com.pedroxsqueiroz.trousseau_server.filters.JWTAuthenticationFilter;
 import br.com.pedroxsqueiroz.trousseau_server.filters.JWTAuthorizationFilter;
 import br.com.pedroxsqueiroz.trousseau_server.sevices.AuthenticationService;
-import br.com.pedroxsqueiroz.trousseau_server.sevices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 @EnableWebSecurity
@@ -46,14 +46,15 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-            .csrf()
-            .disable()
+            .csrf().disable()
+            .cors().configurationSource(this.corsConfigurationSource())
+            .and()
             .authorizeRequests()
             .antMatchers("/auth/", "/user/").permitAll()
             .anyRequest().authenticated()
             .and()
-            .addFilter(new JWTAuthenticationFilter( this.authService ) )
-            .addFilter(new JWTAuthorizationFilter(this.authenticationManager(), this.authService ) );
+            .addFilter( new JWTAuthenticationFilter( this.authService ) )
+            .addFilter( new JWTAuthorizationFilter( this.authenticationManager(), this.authService ) );
 
     }
 
@@ -62,5 +63,19 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
         web
             .ignoring()
             .antMatchers("/user/");
+    }
+
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH"));
+        configuration.setAllowCredentials(true);
+        //the below three lines will add the relevant CORS response headers
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
