@@ -85,6 +85,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         byte[] unathorizedResponseBytes = unathorizedResponseMapper.writer().writeValueAsBytes(unathorizedResponse);
 
         response.setContentType("application/json");
+        response.setStatus(403);
 
         ServletOutputStream outputStream = response.getOutputStream();
         outputStream.write(unathorizedResponseBytes);
