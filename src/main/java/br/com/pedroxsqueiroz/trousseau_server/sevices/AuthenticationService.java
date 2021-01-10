@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationService {
@@ -42,6 +44,9 @@ public class AuthenticationService {
     @Qualifier("auth.props")
     private Properties authProperties;
 
+    @Autowired
+    private Set<AuthenticationUserQueryCustomClause> customClauses;
+
     public boolean authenticate(String login, String password)
     {
 
@@ -52,6 +57,15 @@ public class AuthenticationService {
                                             + "FROM <table> "
                                             + "WHERE <login_column> = ? "
                                             + "AND <password_column> = ?"
+                                            +   (
+                                                    this.customClauses.isEmpty() ?
+                                                        "" : " AND " + String.join( " AND ",
+                                                                this.customClauses
+                                                                        .stream()
+                                                                        .map( clause -> clause.getCustomClause(login) )
+                                                                        .collect( Collectors.toList() )
+                                                                )
+                                                )
                         )
                         .add("login_column", this.authProperties.getProperty("login_column"))
                         .add("password_column", this.authProperties.getProperty("password_column"))

@@ -1,15 +1,21 @@
 package br.com.pedroxsqueiroz.trousseau_server.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+
 
 @Entity()
 @Table(name = "trousseau_user")
 @Data()
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id()
@@ -24,7 +30,10 @@ public class User {
     private String email;
 
     @JsonIgnore
-    @Column(name = "user_password_hash")
+    @Column(name = "user_password_hash", updatable = false)
     private byte[] passwordHash;
+
+    @Column(name = "user_enabled", insertable = false)
+    private Boolean enabled;
 
 }
