@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import br.com.pedroxsqueiroz.trousseau_server.contants.enums.TrousseauFailEnum;
 import org.hibernate.annotations.Where;
 
 import br.com.pedroxsqueiroz.trousseau_server.contants.enums.TrousseauStatus;
@@ -48,6 +49,10 @@ public class Trousseau {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "trousseau_status")
 	private TrousseauStatus status;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "trousseau_fail")
+	private TrousseauFailEnum fail;
 	
 	@ManyToOne
 	@JoinColumn(name = "flat_id")

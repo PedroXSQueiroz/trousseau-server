@@ -70,13 +70,15 @@ public class TrousseauController {
 		}
 		else 
 		{
-			Trousseau trousseau = this.service.setStatus(id, status);
-			
-			if(!Objects.isNull(diff)) 
+			Trousseau trousseau = this.getById(id);
+
+			if(!Objects.isNull(diff))
 			{
 				this.service.putDiff(trousseau, diff);
 			}
-			
+
+			this.service.setStatus(trousseau, status);
+
 			return trousseau;
 		}
 		

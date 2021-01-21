@@ -1,8 +1,10 @@
 package br.com.pedroxsqueiroz.trousseau_server.sevices;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import br.com.pedroxsqueiroz.trousseau_server.contants.enums.TrousseauFailEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,20 +30,52 @@ public class TrousseauService {
 		//FIXME: assegurar que enxoval existe previamente
 		this.dao.save(trousseau);
 	}
-	
+
+	public Trousseau setStatus( Trousseau trousseau, TrousseauStatus status )
+	{
+		if( TrousseauStatus.NOT_OK.equals( status ) )
+		{
+			TrousseauFailEnum fail = this.resolveFailEnum( trousseau );
+			trousseau.setFail(fail);
+		}
+
+		trousseau.setStatus(status);
+
+		this.update(trousseau);
+
+		return trousseau;
+	}
+
 	public Trousseau setStatus( Integer trousseauId, TrousseauStatus status ) 
 	{
 		
 		Trousseau trousseau = this.get(trousseauId);
-		
-		trousseau.setStatus(status);
-		
-		this.update(trousseau);
-		
-		return trousseau;
-		
+
+		return this.setStatus(trousseau, status);
 	}
-	
+
+	private TrousseauFailEnum resolveFailEnum(Trousseau trousseau) {
+
+		switch (trousseau.getStatus())
+		{
+			case SENT:
+				return TrousseauFailEnum.MISPLACED;
+
+			case RETRIEVED:
+
+				List<TrousseauItemDiff> diff = trousseau.getDiff();
+				if(Objects.isNull(diff) || diff.size() == 0 )
+				{
+					return TrousseauFailEnum.INVALIDATED_BY_USER;
+				}
+
+				return TrousseauFailEnum.INVALIDATED_BY_AUTOCHECK;
+
+			default:
+				return null;
+		}
+	}
+
 	public void putDiff(Trousseau trousseau, List<TrousseauItemDiff> diff) 
 	{
 		trousseau.setDiff(diff);
