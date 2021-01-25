@@ -3,8 +3,19 @@ package br.com.pedroxsqueiroz.trousseau_server.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import javax.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "flat_item")
@@ -36,6 +47,10 @@ public class FlatItem {
     @JsonIgnore
     private Flat flat;
 
+	@OneToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "item_id")
+	private Item item;
+	
     @Column(name = "quantity")
     private Integer quantity;
 

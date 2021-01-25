@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -24,6 +27,12 @@ public class Item {
 	
 	@Column(name = "item_value")
 	private Float value;
+	
+	@ManyToOne
+	@JoinTable(	name = "flat_x_item", 
+				joinColumns = @JoinColumn(name = "item_id") , 
+				inverseJoinColumns = @JoinColumn(name = "flat_id") )
+	private Flat flat;
 	
 	@Override
 	public int hashCode() 
