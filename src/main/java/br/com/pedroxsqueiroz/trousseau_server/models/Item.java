@@ -28,12 +28,13 @@ public class Item {
 	@Column(name = "item_value")
 	private Float value;
 	
-	@ManyToOne
+	/*@ManyToOne
 	@JoinTable(	name = "flat_x_item", 
 				joinColumns = @JoinColumn(name = "item_id") , 
 				inverseJoinColumns = @JoinColumn(name = "flat_id") )
 	private Flat flat;
-	
+	*/
+
 	@Override
 	public int hashCode() 
 	{

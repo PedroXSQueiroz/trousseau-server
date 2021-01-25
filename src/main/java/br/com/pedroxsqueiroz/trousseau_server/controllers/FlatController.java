@@ -88,6 +88,7 @@ public class FlatController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 	
+	/*
 	@PostMapping("/itens")
 	@ResponseBody 
 	ResponseEntity<?> loadItens( @RequestParam("trousseaus_flats") MultipartFile trousseausFlatsSpreedsheet) throws IOException
@@ -100,7 +101,6 @@ public class FlatController {
 		return null;
 		
 	}
-	
-	
-	
+	*/
+
 }

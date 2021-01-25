@@ -10,22 +10,16 @@ import br.com.pedroxsqueiroz.trousseau_server.exceptions.FlatItemAlreadyExists;
 import br.com.pedroxsqueiroz.trousseau_server.models.FlatItem;
 import br.com.pedroxsqueiroz.trousseau_server.models.Item;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.FlatItemDao;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import br.com.pedroxsqueiroz.trousseau_server.models.Flat;
-import br.com.pedroxsqueiroz.trousseau_server.models.FlatItem;
 import br.com.pedroxsqueiroz.trousseau_server.models.Trousseau;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.FlatDao;
-import br.com.pedroxsqueiroz.trousseau_server.repositories.FlatItemDao;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.ItemDao;
 import br.com.pedroxsqueiroz.trousseau_server.repositories.TrousseauDao;
 
@@ -174,7 +168,9 @@ public class FlatService {
 		);
 	}
 
-	public void loadItensToFlats(InputStream trousseausFlatsSpreedsheetInputSream) throws EncryptedDocumentException, IOException {
+	//FIXME: AINDA É NECESSÁRIO ARRANJAR TODAS AS PLANILHAS PARA COM PREÇOS, FLATS E ITENS PARA IMPLMENTAR ESTE MÉTODO
+	//ASSIM QUE CONSEGUIR AS PLANILHAS, SERÁ NECESSÁRIO REIMPORTAR O POI NO PROJETO
+	/*public void loadItensToFlats(InputStream trousseausFlatsSpreedsheetInputSream) throws EncryptedDocumentException, IOException {
 		
 		Workbook workbook = WorkbookFactory.create(trousseausFlatsSpreedsheetInputSream);
 		
@@ -235,7 +231,7 @@ public class FlatService {
 			
 		}while(currentPage.hasNext());
 		
-	}
+	}*/
 
 	private void setItemToFlat(Item item, Integer quantity, Flat flat) 
 	{

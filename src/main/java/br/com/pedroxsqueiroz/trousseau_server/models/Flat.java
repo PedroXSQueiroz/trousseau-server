@@ -26,10 +26,12 @@ public class Flat {
 	@Column(name = "unity")
 	private Integer unity;
 
+
 	@OneToMany
 	@JoinColumn(name = "flat_id")
 	@Where(clause="up_to_date=true")
 	private List<FlatItem> itens;
+
 
 	@Transient
 	public boolean initiated() 

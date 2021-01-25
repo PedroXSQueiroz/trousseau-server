@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import br.com.pedroxsqueiroz.trousseau_server.contants.enums.TrousseauFailEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
 import br.com.pedroxsqueiroz.trousseau_server.contants.enums.TrousseauStatus;
@@ -35,12 +36,14 @@ public class Trousseau {
 	
 	@Column(name = "register_date", insertable = false)
 	private Date date;
-	
+
+
 	@Where(clause = "product_type='inner'")
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = TrousseauItem.class)
 	@JoinColumn(name = "trousseau_id")
 	private List<TrousseauItem> itens = new ArrayList<TrousseauItem>();
-	
+
+
 	@Where(clause = "product_type='diff'")
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = TrousseauItemDiff.class)
 	@JoinColumn(name = "trousseau_id")

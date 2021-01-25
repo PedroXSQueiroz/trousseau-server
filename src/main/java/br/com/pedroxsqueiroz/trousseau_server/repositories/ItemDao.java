@@ -12,6 +12,6 @@ import br.com.pedroxsqueiroz.trousseau_server.models.Item;
 @Repository
 public interface ItemDao extends JpaRepository<Item, Integer>, JpaSpecificationExecutor<Item> {
 
-	List<Item> findAllByFlat(Flat flatByCode);
+	//List<Item> findAllByFlat(Flat flatByCode);
 
 }

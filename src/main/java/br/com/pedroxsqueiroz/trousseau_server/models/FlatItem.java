@@ -47,10 +47,6 @@ public class FlatItem {
     @JsonIgnore
     private Flat flat;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "item_id")
-	private Item item;
-	
     @Column(name = "quantity")
     private Integer quantity;
 
