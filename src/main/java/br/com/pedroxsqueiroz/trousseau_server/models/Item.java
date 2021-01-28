@@ -27,6 +27,9 @@ public class Item {
 	
 	@Column(name = "item_value")
 	private Float value;
+
+	@Column(name = "item_code")
+	private Long itemCode;
 	
 	/*@ManyToOne
 	@JoinTable(	name = "flat_x_item", 

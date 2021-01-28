@@ -273,6 +273,12 @@ public class FlatService {
 			throw new FlatItemAlreadyExists(flat, item);
 		}
 
+        if( Objects.isNull( item.getItemCode() ) )
+        {
+        	Long itemCode = this.itemDao.getNextItemCode();
+        	item.setItemCode(itemCode);
+		}
+
 		this.itemDao.save(item);
 
 		flatItem.setFlat(flat);
@@ -312,7 +318,9 @@ public class FlatService {
 		flatItemUpdated.setId(null);
 		flatItemUpdated.getItem().setId(null);
 
-		return this.addItemToFlat( flat, flatItemUpdated );
+		FlatItem updatedFlatItem = this.addItemToFlat(flat, flatItemUpdated);
+
+		return updatedFlatItem;
 	}
 
 	@Transactional
