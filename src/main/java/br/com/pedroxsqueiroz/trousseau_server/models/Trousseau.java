@@ -3,6 +3,7 @@ package br.com.pedroxsqueiroz.trousseau_server.models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -60,4 +61,18 @@ public class Trousseau {
 	@ManyToOne
 	@JoinColumn(name = "flat_id")
 	private Flat flat;
+
+	@OneToMany()
+	@JoinColumn(name = "trousseau_id")
+	List<TrousseauLog> logs;
+
+	public void addLog(TrousseauLog log)
+	{
+		if( Objects.isNull(this.logs) )
+		{
+			this.logs = new ArrayList<TrousseauLog>();
+		}
+
+		this.logs.add(log);
+	}
 }

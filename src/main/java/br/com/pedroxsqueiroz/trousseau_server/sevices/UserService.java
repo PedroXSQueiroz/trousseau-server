@@ -8,6 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -81,5 +87,29 @@ public class UserService {
     public void delete(User user) {
         user.setEnabled(false);
         this.dao.save(user);
+    }
+
+    public User getLoggedUser()
+    {
+        Optional<HttpServletRequest> currentRequestGetter =  Optional.ofNullable(RequestContextHolder.getRequestAttributes())
+                .filter(requestAttributes -> ServletRequestAttributes.class.isAssignableFrom(requestAttributes.getClass()))
+                .map(requestAttributes -> ((ServletRequestAttributes) requestAttributes))
+                .map(ServletRequestAttributes::getRequest);
+
+        HttpServletRequest request;
+        if( Objects.nonNull( request = currentRequestGetter.get() ) )
+        {
+
+            String authorizationHeader = request.getHeader("Authorization");
+
+            String login = this.authService.decreptyToken(authorizationHeader);
+
+            User user = this.getByLogin(login);
+
+            return user;
+
+        }
+
+        return null;
     }
 }

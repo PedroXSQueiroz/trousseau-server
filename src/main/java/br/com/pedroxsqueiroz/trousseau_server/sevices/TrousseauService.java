@@ -1,10 +1,13 @@
 package br.com.pedroxsqueiroz.trousseau_server.sevices;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import br.com.pedroxsqueiroz.trousseau_server.contants.enums.LogType;
 import br.com.pedroxsqueiroz.trousseau_server.contants.enums.TrousseauFailEnum;
+import br.com.pedroxsqueiroz.trousseau_server.models.TrousseauLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,9 @@ public class TrousseauService {
 
 	@Autowired
 	private TrousseauDao dao;
+
+	@Autowired
+	private UserService userService;
 	
 	public Trousseau get(Integer id) 
 	{
@@ -40,6 +46,15 @@ public class TrousseauService {
 		}
 
 		trousseau.setStatus(status);
+
+		TrousseauLog log = new TrousseauLog();
+		log.setStatus( status );
+		log.setRegisterDate( new Date() );
+		log.setUser( this.userService.getLoggedUser() );
+		log.setType( LogType.TROUSSEAU_CHANGE );
+
+		trousseau.addLog(log);
+
 
 		this.update(trousseau);
 
