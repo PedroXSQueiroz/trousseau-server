@@ -62,7 +62,7 @@ public class Trousseau {
 	@JoinColumn(name = "flat_id")
 	private Flat flat;
 
-	@OneToMany()
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "trousseau_id")
 	List<TrousseauLog> logs;
 

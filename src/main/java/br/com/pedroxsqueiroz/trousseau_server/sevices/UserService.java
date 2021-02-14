@@ -100,7 +100,7 @@ public class UserService {
         if( Objects.nonNull( request = currentRequestGetter.get() ) )
         {
 
-            String authorizationHeader = request.getHeader("Authorization");
+            String authorizationHeader = request.getHeader("Authorization").replace("Bearer ", "");
 
             String login = this.authService.decreptyToken(authorizationHeader);
 

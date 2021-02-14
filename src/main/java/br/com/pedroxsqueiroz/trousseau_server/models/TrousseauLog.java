@@ -5,8 +5,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Table(name = "trousseau_log")
 @Entity()
+@Table(name = "trousseau_log")
 @PrimaryKeyJoinColumn( name = "trousseau_log_id" )
 @AttributeOverride( name = "id", column = @Column(name = "trousseau_log_id" ) )
 @Data

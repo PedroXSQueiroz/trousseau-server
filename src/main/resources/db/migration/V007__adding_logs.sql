@@ -6,18 +6,18 @@ CREATE TABLE log(
     register_date TIMESTAMP,
     CONSTRAINT FK_Log_Trousseau_user
         FOREIGN KEY (id_trousseau_user)
-        REFERENCES trouseau_user(id_trousseau_user)
+        REFERENCES trousseau_user(id_trousseau_user)
 );
 
 
 CREATE TABLE trousseau_log(
-    trousseau_log_id          INT NOT NULL,
+    trousseau_log_id INT NOT NULL,
     trousseau_id    INT NOT NULL,
     status_attributed VARCHAR(50) NOT NULL,
     CONSTRAINT FK_Log_x_trousseau_Log
-        FOREIGN KEY (log_id)
+        FOREIGN KEY (trousseau_log_id)
         REFERENCES log(log_id),
     CONSTRAINT FK_Log_x_trousseau_Trousseau
         FOREIGN KEY (trousseau_id)
-        REFERENCES trouseau_user(id_trousseau_user)
+        REFERENCES trousseau_user(id_trousseau_user)
 );

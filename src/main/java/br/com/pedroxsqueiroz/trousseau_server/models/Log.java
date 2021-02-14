@@ -9,6 +9,8 @@ import java.util.Date;
 @Entity
 @Table(name = "log")
 @Data
+@Inheritance(strategy = InheritanceType.JOINED)
+//@MappedSuperclass
 public class Log {
 
     @Id
